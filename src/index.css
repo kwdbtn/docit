@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* NavLink looks for this class for active links */
+.active {
+  color: rgb(37 99 235);
+}
