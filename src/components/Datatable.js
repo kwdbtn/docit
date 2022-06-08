@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CheckIcon,
+  DocumentIcon,
+  DocumentTextIcon,
   FolderIcon,
   PencilAltIcon,
+  PhotographIcon,
   ShareIcon,
   TrashIcon,
 } from "@heroicons/react/solid";
@@ -32,6 +35,32 @@ const Datatable = ({ data }) => {
     }
   };
 
+  const getItemFileIcon = (item) => {
+    // images
+    if (item.file_type.includes("image")) {
+      return <PhotographIcon className="h-4 w-4 text-blue-500" />;
+
+      // pdf
+    } else if (item.file_type.includes("pdf")) {
+      return <DocumentIcon className="h-4 w-4 text-red-500" />;
+
+      // word docs
+    } else if (
+      item.file_type.includes("wordprocessing") ||
+      item.file_type.includes("msword")
+    ) {
+      return <DocumentTextIcon className="h-4 w-4 text-blue-700" />;
+
+      // excel docs
+    } else if (item.file_type.includes("spreadsheet")) {
+      return <DocumentTextIcon className="h-4 w-4 text-green-700" />;
+
+      // folders
+    } else {
+      return <FolderIcon className="h-4 w-4 text-[#F8D775]" />;
+    }
+  };
+
   return (
     <div className="mt-5">
       <div className="flex justify-end">
@@ -56,22 +85,20 @@ const Datatable = ({ data }) => {
           </tr>
         </thead>
         <tbody>
-          {filteredData.map((item) => (
+          {data.map((item) => (
             <tr key={item.id} className="text-left hover:bg-blue-200">
-              <td className="px-3 w-[1%]">
-                <FolderIcon className="h-4 w-4 text-[#F8D775]" />
-              </td>
+              <td className="px-3 w-[1%]">{getItemFileIcon(item)}</td>
               <td className="py-1 whitespace-nowrap text-sm font-normal text-gray-900 w-[40%]">
                 {<Link to="">{item.name}</Link>}
               </td>
               <td className="py-2 whitespace-nowrap text-sm font-normal text-gray-900">
-                Kwadwo Boateng
+                Sosa
               </td>
               <td className="py-2 whitespace-nowrap text-sm font-normal text-gray-900">
-                Saturday, May 14, 2022
+                {item.created_at}
               </td>
               <td className="py-2 whitespace-nowrap text-sm font-normal text-gray-900">
-                0kb
+                {item.file_size ? item.file_size : "..."}bytes
               </td>
               <td className="flex py-2 whitespace-nowrap text-sm justify-around">
                 <ShareIcon className="h-4 w-4 text-gray-500 hover:text-blue-600 cursor-pointer" />
@@ -83,7 +110,7 @@ const Datatable = ({ data }) => {
         </tbody>
       </table>
       <div className="text-right text-sm text-gray-500">
-        {filteredData.length} Item(s)
+        {data.length} Item(s)
       </div>
     </div>
   );

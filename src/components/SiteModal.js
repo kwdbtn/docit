@@ -21,6 +21,8 @@ function SiteModal({ modalData, closeModal }) {
         console.log("This is for the new folder with ID ", modalData.siteID);
         let response = await axios.post(folderURl, {
           name: siteName,
+          file_size: "0",
+          file_type: "Folder",
         });
         console.log(response.data);
       }

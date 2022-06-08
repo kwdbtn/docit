@@ -8,8 +8,8 @@ const Navbar = () => {
         <Link to="/">DocIt</Link>
       </h1>
       <ul className="flex">
-        <li className="p-4">A menu</li>
-        <li className="p-4">Another menu</li>
+        <li className="p-4">Action</li>
+        <li className="p-4">Login</li>
       </ul>
     </div>
   );

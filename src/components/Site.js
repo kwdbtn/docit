@@ -9,10 +9,12 @@ import {
 } from "@heroicons/react/solid";
 import Datatable from "./Datatable";
 import SiteButton from "./SiteButton";
+import MyDropzone from "./MyDropzone";
 
 const Site = ({ showModal }) => {
   const [site, setSite] = useState({});
   const [folders, setFolders] = useState([]);
+  const [folderUpdate, setFolderUpdate] = useState("initial_value");
 
   // url to get site details
   const getSiteUrl = "http://127.0.0.1:8000/api/sites/";
@@ -27,23 +29,31 @@ const Site = ({ showModal }) => {
     siteID: id,
   };
 
+  // get folders of site
+  const getFolders = async () => {
+    let response = await axios.get(getFoldersUrl);
+    setFolders(response.data);
+  };
+
   useEffect(() => {
     // get site details
     const getSite = async () => {
       let response = await axios.get(getSiteUrl + id);
-      console.log(response.data);
       setSite(response.data);
-    };
-
-    // get folders of site
-    const getFolders = async () => {
-      let response = await axios.get(getFoldersUrl);
-      setFolders(response.data);
+      console.log(response.data);
     };
 
     getSite();
+
+    // update site when ID changes and when files are uploaded
     getFolders();
-  }, [id]);
+    console.log(folderUpdate);
+  }, [id, folderUpdate]);
+
+  // update files when new file is uploaded
+  useEffect(() => {
+    getFolders();
+  }, [folderUpdate]);
 
   return (
     <>
@@ -81,6 +91,12 @@ const Site = ({ showModal }) => {
           }
         />
       </div>
+
+      <MyDropzone
+        siteID={id}
+        refreshDataTable={(value) => setFolderUpdate(value)}
+        className="mt-5 h-50 w-full border-2 border-red-500 border-dashed"
+      />
 
       <Datatable className="w-full" data={folders} />
     </>
